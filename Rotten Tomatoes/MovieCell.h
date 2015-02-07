@@ -1,5 +1,5 @@
 //
-//  ViewController.h
+//  MovieCell.h
 //  Rotten Tomatoes
 //
 //  Created by Syed, Afzal on 2/3/15.
@@ -8,8 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface ViewController : UIViewController
-
+@interface MovieCell : UITableViewCell
 
 @end
-
