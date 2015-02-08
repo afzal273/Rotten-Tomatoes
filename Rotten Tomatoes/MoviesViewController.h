@@ -10,4 +10,9 @@
 
 @interface MoviesViewController : UIViewController
 
+@property (weak, nonatomic) IBOutlet UIView *errorView;
+@property (weak, nonatomic) IBOutlet UIView *networkErrorView;
+@property(weak,nonatomic) NSString *Type;
+
+
 @end

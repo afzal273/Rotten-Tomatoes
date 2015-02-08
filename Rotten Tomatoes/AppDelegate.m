@@ -7,6 +7,7 @@
 //
 
 #import "AppDelegate.h"
+#import "MoviesViewController.h"
 
 @interface AppDelegate ()
 
@@ -17,7 +18,49 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
+//    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen]bounds]];
+//    MoviesViewController *vc = [[MoviesViewController alloc]init];
+//    
+
+    
+    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    
+    // Create the tab bar controller
+    UITabBarController *tabBarController = [[UITabBarController alloc] init];
+    
+    self.window.rootViewController = tabBarController;
+    
+    MoviesViewController *mvc = [[MoviesViewController alloc]init];
+    mvc.Type = @"BoxOffice";
+    
+    MoviesViewController *dvc= [[MoviesViewController alloc]init];
+    dvc.Type = @"DVD";
+    
+    UINavigationController *mnvc = [[UINavigationController alloc]initWithRootViewController:mvc];
+
+    UINavigationController *dnvc = [[UINavigationController alloc]initWithRootViewController:dvc];
+    
+
+    
+    tabBarController.viewControllers = @[mnvc, dnvc];
+    mnvc.tabBarItem.title = @"Now Playing";
+    mnvc.tabBarItem.image = [UIImage imageNamed:@"movies2.png"];
+
+    
+    dnvc.tabBarItem.title = @"DVDs";
+    dnvc.tabBarItem.image = [UIImage imageNamed:@"Dvd.png"];
+    
+    self.window.backgroundColor = [UIColor whiteColor];
+    [self.window makeKeyAndVisible];
     return YES;
+    
+    
+//    self.window.rootViewController = nvc;
+//    [self.window makeKeyAndVisible];
+//    
+//    
+//    
+//    return YES;
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application {
