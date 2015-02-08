@@ -37,7 +37,7 @@
 
     
     
-    NSLog(@"Run time is %i hrs, %i min", runTime/60, runTime%60);
+//    NSLog(@"Run time is %i hrs, %i min", runTime/60, runTime%60);
     
     
     

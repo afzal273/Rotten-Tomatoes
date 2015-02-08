@@ -19,7 +19,7 @@
 @property (nonatomic, strong) NSArray *movies;
 @property (nonatomic, strong) UIRefreshControl *refreshControl;
 @property (nonatomic, strong) NSString *urlToFetch;
-
+@property (weak, nonatomic) IBOutlet UISearchBar *searchBar;
 
 @end
 
@@ -33,6 +33,10 @@
 
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
+    
+    self.searchBar.placeholder = @"Search";
+    self.searchBar.delegate = self;
+    self.searchBar.showsCancelButton = YES;
     
     
     if ([self.Type  isEqual: @"BoxOffice"]) {
