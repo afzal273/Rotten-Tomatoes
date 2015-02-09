@@ -17,10 +17,6 @@
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    // Override point for customization after application launch.
-//    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen]bounds]];
-//    MoviesViewController *vc = [[MoviesViewController alloc]init];
-//    
 
     
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
@@ -55,12 +51,6 @@
     return YES;
     
     
-//    self.window.rootViewController = nvc;
-//    [self.window makeKeyAndVisible];
-//    
-//    
-//    
-//    return YES;
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application {

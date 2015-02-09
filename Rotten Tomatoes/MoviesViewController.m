@@ -31,13 +31,17 @@
     // Do any additional setup after loading the view from its nib.
     // i'm going to provide data for you
     // also delegate all events to me
-
+    [SVProgressHUD show];
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
     
     self.searchBar.placeholder = @"Search";
     self.searchBar.delegate = self;
-    self.searchBar.showsCancelButton = YES;
+    
+    CGRect newBounds = self.tableView.bounds;
+    newBounds.origin.y = newBounds.origin.y + self.searchBar.bounds.size.height;
+    self.tableView.bounds = newBounds;
+    [self.searchBar sizeToFit];
     
     
     if ([self.Type  isEqual: @"BoxOffice"]) {
@@ -56,7 +60,7 @@
     [self.refreshControl addTarget:self action:@selector(onRefresh) forControlEvents:UIControlEventValueChanged];
     [self.tableView insertSubview:self.refreshControl atIndex:0];
     
-    [SVProgressHUD show];
+
     [self updateMovies];
     [SVProgressHUD dismiss];
     
@@ -189,28 +193,12 @@
 }
 
 
-
-
 #pragma  mark Search Methods
 
 - (void) searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText{
-    //NSLog(@"in search: %@", searchBar.text);
+    self.searchBar.showsCancelButton = TRUE;
+
     NSString *searchBarText = searchBar.text;
-//    NSPredicate *searchSearch = [NSPredicate predicateWithFormat:@"self CONTAINS[cd] %@", searchBarText];
-//    NSArray *searchResults = [self.movies filteredArrayUsingPredicate:searchSearch];
-//   NSLog(@"%@",searchResults);
-//    [self.movies[0]
-    
-    
-    /*
-    NSArray *searchResults = [self.movies filteredArrayUsingPredicate:searchSearch];
-    NSLog(@"count is %i", searchResults.count);
-    if (searchResults.count > 0){
-        NSLog(@"%@", searchResults[0]);
-        
-    }
-     
-     */
     
     self.filteredMovies  = [[NSMutableArray alloc] init];
     
@@ -231,26 +219,14 @@
 
 - (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar
 {
+    self.searchBar.showsCancelButton = FALSE;
     [searchBar resignFirstResponder];
     searchBar.text = nil;
-//    [self.filteredMovies removeAllObjects];
     self.filteredMovies = self.movies;
     [self.tableView reloadData];
-    //searchBar.hidden = YES;
+    
 }
 
 
-
-
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end

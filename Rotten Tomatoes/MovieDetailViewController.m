@@ -34,11 +34,6 @@
     self.ratingLabel.text = [NSString stringWithFormat:@"%@, %@ min",self.movie[@"mpaa_rating"], self.movie[@"runtime"]];
     [self.ratingLabel sizeToFit];
     
-
-    
-    
-//    NSLog(@"Run time is %i hrs, %i min", runTime/60, runTime%60);
-    
     
     
     self.synopsisLabel.text = self.movie[@"synopsis"];
@@ -71,12 +66,7 @@
     
                                  
 }
-//
-////-(void)deposit:(NSDecimalNumber *)amount {
-//- (NSString*) formatTimeString:(NSString *) runTime {
-//    return @"Hello";
-//    
-//}
+
 
 - (void)viewWillDisappear:(BOOL)animated {
     self.parentViewController.tabBarController.tabBar.hidden = FALSE;
@@ -90,14 +80,6 @@
     // Dispose of any resources that can be recreated.
 }
 
-/*
-#pragma mark - Navigation
 
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end
