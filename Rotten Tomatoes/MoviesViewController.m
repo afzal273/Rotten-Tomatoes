@@ -16,10 +16,11 @@
  
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
-@property (nonatomic, strong) NSArray *movies;
+@property (nonatomic, strong) NSMutableArray *movies;
 @property (nonatomic, strong) UIRefreshControl *refreshControl;
 @property (nonatomic, strong) NSString *urlToFetch;
 @property (weak, nonatomic) IBOutlet UISearchBar *searchBar;
+@property (strong, nonatomic) NSMutableArray *filteredMovies;
 
 @end
 
@@ -103,6 +104,7 @@
     
 }
 
+
 -(void) onRefresh{
     [self updateMovies];
     [self.refreshControl endRefreshing];
@@ -128,7 +130,11 @@
 #pragma mark - Table Methods
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    if (self.filteredMovies.count > 0){
+        return self.filteredMovies.count;
+    } else {
     return self.movies.count;
+    }
 }
 
 - (UITableViewCell *) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -136,9 +142,13 @@
     MovieCell *cell = [tableView dequeueReusableCellWithIdentifier:@"MovieCell"];
     
     
+    NSDictionary *movie;
     // index path is composed of row and section
-    NSDictionary *movie = self.movies[indexPath.row];
-    
+    if (self.filteredMovies.count > 0) {
+        movie = self.filteredMovies[indexPath.row];
+    } else {
+        movie = self.movies[indexPath.row];
+    }
     cell.titleLabel.text = movie[@"title"];
     //cell.textLabel.lineBreakMode.
     cell.synopsisLabel.text = movie[@"synopsis"];
@@ -148,22 +158,7 @@
    // url = [url stringByReplacingOccurrencesOfString:@"tmb" withString:@"ori"];
     //NSLog(@"%@",url);
     [cell.posterView setImageWithURL:[NSURL URLWithString:url]];
-//    [cell.posterView setImageWithURLRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:url]] placeholderImage:[UIImage imageNamed:@"movie2.png"] success:<#^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image)success#>{
-//        if (request) {
-//            [UIView transitionWithView:self.view
-//                              duration:1.0f
-//                               options:UIViewAnimationOptionTransitionCrossDissolve];
-//        }
-//        
-//    }failure:<#^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error)failure#>{
-//        [self handleNetworkError];
-//        
-//        
-//    }];
     
-    
-    //cell.titleLabel.text = @"American Sniper";
-    //cell.synopsisLabel.text = @"A war movie";
     
     return cell;
 }
@@ -172,7 +167,14 @@
     
     [tableView deselectRowAtIndexPath:indexPath animated:YES];    
     MovieDetailViewController *vc = [[MovieDetailViewController alloc]init];
-    vc.movie = self.movies[indexPath.row];
+    
+    if (self.filteredMovies.count > 0){
+            vc.movie = self.filteredMovies[indexPath.row];
+    } else {
+            vc.movie = self.movies[indexPath.row];
+    }
+    
+    
     
     UIBarButtonItem *barButton = [[UIBarButtonItem alloc]init];
     barButton.title = @"Back";
@@ -185,6 +187,63 @@
     
 
 }
+
+
+
+
+#pragma  mark Search Methods
+
+- (void) searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText{
+    //NSLog(@"in search: %@", searchBar.text);
+    NSString *searchBarText = searchBar.text;
+//    NSPredicate *searchSearch = [NSPredicate predicateWithFormat:@"self CONTAINS[cd] %@", searchBarText];
+//    NSArray *searchResults = [self.movies filteredArrayUsingPredicate:searchSearch];
+//   NSLog(@"%@",searchResults);
+//    [self.movies[0]
+    
+    
+    /*
+    NSArray *searchResults = [self.movies filteredArrayUsingPredicate:searchSearch];
+    NSLog(@"count is %i", searchResults.count);
+    if (searchResults.count > 0){
+        NSLog(@"%@", searchResults[0]);
+        
+    }
+     
+     */
+    
+//    NSDictionary *movie;// = [[NSDictionary alloc]init];
+    self.filteredMovies  = [[NSMutableArray alloc] init];
+    
+    
+    for ( NSDictionary *movie in self.movies) {
+        //NSLog(@"%@", movie[@"title"]);
+        if ([[movie[@"title"] lowercaseString] containsString:[searchBarText lowercaseString]]) {
+            NSLog(@"%@", movie[@"title"]);
+            //[testArray addObject:movie];
+            [self.filteredMovies addObject:movie];
+            //NSLog(@"size of the array is %ld]", self.filteredMovies.count);
+            
+        }
+    }
+    NSLog(@"size of the array is %ld", self.filteredMovies.count);
+    [self.tableView reloadData];
+    
+
+    
+}
+
+
+- (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar
+{
+    [searchBar resignFirstResponder];
+    searchBar.text = nil;
+    [self.filteredMovies removeAllObjects];
+    [self.tableView reloadData];
+    //searchBar.hidden = YES;
+}
+
+
 
 
 
