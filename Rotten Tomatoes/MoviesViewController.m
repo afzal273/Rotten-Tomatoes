@@ -130,7 +130,7 @@
 #pragma mark - Table Methods
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    if (self.filteredMovies.count > 0){
+    if (self.filteredMovies){
         return self.filteredMovies.count;
     } else {
     return self.movies.count;
@@ -144,7 +144,7 @@
     
     NSDictionary *movie;
     // index path is composed of row and section
-    if (self.filteredMovies.count > 0) {
+    if (self.filteredMovies) {
         movie = self.filteredMovies[indexPath.row];
     } else {
         movie = self.movies[indexPath.row];
@@ -168,7 +168,7 @@
     [tableView deselectRowAtIndexPath:indexPath animated:YES];    
     MovieDetailViewController *vc = [[MovieDetailViewController alloc]init];
     
-    if (self.filteredMovies.count > 0){
+    if (self.filteredMovies){
             vc.movie = self.filteredMovies[indexPath.row];
     } else {
             vc.movie = self.movies[indexPath.row];
@@ -212,24 +212,19 @@
      
      */
     
-//    NSDictionary *movie;// = [[NSDictionary alloc]init];
     self.filteredMovies  = [[NSMutableArray alloc] init];
     
     
     for ( NSDictionary *movie in self.movies) {
-        //NSLog(@"%@", movie[@"title"]);
         if ([[movie[@"title"] lowercaseString] containsString:[searchBarText lowercaseString]]) {
-            NSLog(@"%@", movie[@"title"]);
-            //[testArray addObject:movie];
             [self.filteredMovies addObject:movie];
-            //NSLog(@"size of the array is %ld]", self.filteredMovies.count);
             
         }
     }
-    NSLog(@"size of the array is %ld", self.filteredMovies.count);
+    if ([searchBarText isEqual:@""]){
+        self.filteredMovies = self.movies;
+    }
     [self.tableView reloadData];
-    
-
     
 }
 
@@ -238,7 +233,8 @@
 {
     [searchBar resignFirstResponder];
     searchBar.text = nil;
-    [self.filteredMovies removeAllObjects];
+//    [self.filteredMovies removeAllObjects];
+    self.filteredMovies = self.movies;
     [self.tableView reloadData];
     //searchBar.hidden = YES;
 }
